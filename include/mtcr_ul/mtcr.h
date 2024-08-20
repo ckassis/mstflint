@@ -46,6 +46,7 @@ extern "C"
 #if defined(MTCR_UL) && !defined(NO_INBAND)
 #include <mtcr_ul/mtcr_ib.h>
 #endif
+#define INIT_DONE_OFFSET_IN_RECOVERY_SPACE 0
 
 #define SLV_ADDRS_NUM 128
 
