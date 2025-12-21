@@ -612,6 +612,8 @@ bool Fs5Operations::GetLivefishIndicationAddr(uint32_t& lfIndicationAddr)
     {
         case DeviceConnectX8_HwId:
         case DeviceConnectX9_HwId:
+        case DeviceConnectX8_Pure_PCIe_Switch_HwId:
+        case DeviceConnectX9_Pure_PCIe_Switch_HwId:
             lfIndicationAddr = 0xf813c;
             break;
 
@@ -653,6 +655,50 @@ bool Fs5Operations::ClearLivefishfIndication(Flash* flashAccess)
 
         DPRINTF(
           ("Fs5Operations::ClearLivefishfIndication - Successfully cleared LF indication at 0x%x\n", lfIndicationAddr));
+    }
+
+    return true;
+}
+
+bool Fs5Operations::burnEncryptedImage(FwOperations* imageOps, ExtBurnParams& burnParams)
+{
+    if (!checkAndDisableFlashWpIfRequired())
+    {
+        return errmsg("Failed to check and disable flash write protection if from bottom.\n");
+    }
+
+    bool success = Fs4Operations::burnEncryptedImage(imageOps, burnParams);
+    if (!success)
+    {
+        restoreWriteProtectInfo();
+        return errmsg("burnEncryptedImage failed: %s", err());
+    }
+
+    if (!restoreWriteProtectInfo())
+    {
+        return errmsg("Post-burn operation failed: Failed to restore flash write protection if from bottom.\n");
+    }
+
+    return true;
+}
+
+bool Fs5Operations::FwBurnAdvanced(FwOperations* imageOps, ExtBurnParams& burnParams)
+{
+    if (!checkAndDisableFlashWpIfRequired())
+    {
+        return errmsg("Failed to check and disable flash write protection if from bottom.\n");
+    }
+
+    bool success = Fs3Operations::FwBurnAdvanced(imageOps, burnParams);
+    if (!success)
+    {
+        restoreWriteProtectInfo();
+        return errmsg("FwBurnAdvanced failed: %s", err());
+    }
+
+    if (!restoreWriteProtectInfo())
+    {
+        return errmsg("Post-burn operation failed: Failed to restore flash write protection if from bottom.\n");
     }
 
     return true;

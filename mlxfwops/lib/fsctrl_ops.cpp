@@ -946,7 +946,7 @@ bool FsCtrlOperations::burnEncryptedImage(FwOperations* imageOps, ExtBurnParams&
 
 bool FsCtrlOperations::isMultiAsicSystemComponent()
 {
-    if (_hwDevId == QUANTUM3_HW_ID || _hwDevId == CX8_HW_ID || _hwDevId == CX8_PURE_PCIE_SWITCH_HW_ID || _hwDevId == CX9_HW_ID)
+    if (_hwDevId == QUANTUM3_HW_ID || _hwDevId == CX8_HW_ID || _hwDevId == CX8_PURE_PCIE_SWITCH_HW_ID || _hwDevId == CX9_HW_ID || _hwDevId == CX9_PURE_PCIE_SWITCH_HW_ID)
     {
         return true;
     }
@@ -961,10 +961,8 @@ bool FsCtrlOperations::_Burn(std::vector<u_int8_t> imageOps4MData,
     progressCallBack.uefi_func
 #endif
     FwComponent bootImageComponent;
-    std::vector<FwComponent> compsToBurn;
 
     bootImageComponent.init(imageOps4MData, imageOps4MData.size(), ComponentId);
-    compsToBurn.push_back(bootImageComponent);
     if (!_fwCompsAccess->lock_flash_semaphore())
     {
         return errmsg(FwCompsErrToFwOpsErr(_fwCompsAccess->getLastError()), "%s", _fwCompsAccess->getLastErrMsg());
@@ -978,7 +976,7 @@ bool FsCtrlOperations::_Burn(std::vector<u_int8_t> imageOps4MData,
             DPRINTF(("-W- DMA access is not supported due to BME is unset (Bus primary Enable).\n"));
         }
     }
-    if (!_fwCompsAccess->burnComponents(compsToBurn, &progressCallBack))
+    if (!_fwCompsAccess->burnComponents(bootImageComponent, &progressCallBack))
     {
         _fwCompsAccess->unlock_flash_semaphore();
         return errmsg(FwCompsErrToFwOpsErr(_fwCompsAccess->getLastError()), "%s", _fwCompsAccess->getLastErrMsg());

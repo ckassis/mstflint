@@ -28,7 +28,7 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-AC_INIT(mstflint, 4.34.0, akiselman-org@exchange.nvidia.com)
+AC_INIT(mstflint, 4.35.0, akiselman-org@exchange.nvidia.com)
 
 AC_DEFINE_UNQUOTED([PROJECT], ["mstflint"], [Firmware Burning and Diagnostics Tools for NVIDIA network devices.])
 AC_SUBST([PROJECT])
@@ -249,7 +249,9 @@ if test "x$enable_fw_mgr" = "xyes"; then
     AC_MSG_NOTICE([zlib CFLAGS:'$libz_CFLAGS' LIBS:'$libz_LIBS'])
     AC_SUBST(libz_CFLAGS)
     AC_SUBST(libz_LIBS)
-    # lzma
+fi
+
+if test "x$enable_fw_mgr" = "xyes" || test "x$enable_adb_generic_tools" = "xyes"; then
     AC_ARG_WITH([liblzma], AS_HELP_STRING([--with-liblzma=PATH], [use liblzma from the specified PATH]),
         [
             liblzma_dir="$withval"
@@ -396,9 +398,26 @@ AC_ARG_ENABLE(nvml,
     [enable_nvml="$default_en_nvml"]
 )
 AC_MSG_RESULT($enable_nvml)
-if test "x$enable_nvml" = "xyes"; then
-    AC_CHECK_HEADER(nvml.h, [], [AC_MSG_ERROR([cannot find nvml.h, please check you nvidia driver installation.])])
-    AC_CHECK_LIB([nvidia-ml], [nvmlInit_v2], [], [AC_MSG_ERROR([libnvidia-ml not found, please check you nvidia driver installation.])])
+
+if test "$enable_nvml" = "yes"; then
+    AC_ARG_WITH([nvml-include-dir], AS_HELP_STRING([--with-nvml-include-dir=DIR], [use nvml from the specified DIR]),
+        [
+            nvml_dir="$withval"
+            AC_MSG_NOTICE([Using nvml from $nvml_dir])
+            CXXFLAGS="$CXXFLAGS -I$nvml_dir"
+            CFLAGS="$CFLAGS -I$nvml_dir"
+        ],
+        [
+            AC_MSG_NOTICE([Looking for nvml headers])
+            PKG_CHECK_MODULES([nvml], [nvidia-ml], [],
+                [
+                    AC_MSG_NOTICE([Looking for nvml headers and libraries in default include paths])
+                    AC_CHECK_HEADERS([nvml.h], [], [AC_MSG_ERROR([cannot find nvml.h in default include paths, please check you nvidia driver installation or use --with-nvml-include-dir=DIR to specify the correct directory path of nvml.h.])])
+                    AC_CHECK_LIB([nvidia-ml], [nvmlInit_v2], [], [AC_MSG_ERROR([libnvidia-ml not found in default library paths, please check you nvidia driver installation])])
+                ]
+            )
+        ]
+    )
     CXXFLAGS="$CXXFLAGS -DENABLE_NVML"
     CFLAGS="$CFLAGS -DENABLE_NVML"
 fi

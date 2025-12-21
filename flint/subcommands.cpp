@@ -3337,6 +3337,7 @@ void BurnSubCommand::cleanInterruptedCommand()
     if (_flintParams.device_specified)
     {
         UnlockDevice(_fwOps);
+        _fwOps->restoreWriteProtectInfo();
     }
 }
 
@@ -4043,6 +4044,11 @@ FlintStatus BurnSubCommand::burnMFA2LiveFish(dm_dev_id_t devid_t)
         {
             componentBuffer[i] = fs3_image_signature[i];
         }
+    }
+    else if (_fwType == FIT_FS5)
+    {
+        reportErr(true, "burning MFA2 in livefish mode is not supported for FS5 and FS6");
+        return FLINT_FAILED;
     }
 
     string fileName = "/tmp/temp.bin"; // Get temp name
@@ -5725,7 +5731,7 @@ bool SwResetSubCommand::IsDeviceSupported(dm_dev_id_t dev_id)
         return true;
     }
 
-    reportErr(true, "Device %s doesn't support swreset command.\n", dm_dev_type2str(dev_id));
+    reportErr(true, "Device %s doesn't support swreset command.\n", dm_dev_type2str_external(dev_id));
     return false;
 }
 
@@ -7443,6 +7449,11 @@ FlintStatus HwSubCommand::printAttr(const ext_flash_attr_t& attr)
         }
     }
 
+    if (attr.series_code_support)
+    {
+        printf("  " SERIES_CODE_PARAM "              0x%02X\n", attr.series_code);
+    }
+
     return FLINT_SUCCESS;
 }
 
@@ -8982,7 +8993,7 @@ bool QueryBfbComponentsSubCommand::isDeviceSupported()
     if (devid_type != DeviceBlueField3)
     {
         reportErr(true, "query_bfb_components sub-command is supported for BlueField3 only. Device provided: %s\n",
-                  dm_dev_type2str(devid_type));
+                  dm_dev_type2str_external(devid_type));
         return false;
     }
 
