@@ -2488,7 +2488,8 @@ u_int32_t supported_device_ids[] =
  DeviceArcusP_HwId,           DeviceArcusE_HwId,         DeviceSecureHost_HwId,
  DeviceSpectrum3_HwId,        DeviceSpectrum4_HwId,      DeviceGearBox_HwId,
  DeviceGearBoxManager_HwId,   DeviceAbirGearBox_HwId,    DeviceGB100_HwId, DeviceGR100_HwId,
- DeviceConnectX8_Pure_PCIe_Switch_HwId, DeviceConnectX9_HwId, DeviceConnectX9_Pure_PCIe_Switch_HwId};
+ DeviceConnectX8_Pure_PCIe_Switch_HwId, DeviceConnectX9_HwId, DeviceConnectX9_Pure_PCIe_Switch_HwId,
+ DeviceSpectrum5_HwId};
 #define SUPPORTED_DEVICE_ID_TABLE_SIZE (sizeof(supported_device_ids) / sizeof(u_int32_t))
 
 int is_supported_device_id(u_int16_t dev_id)
@@ -2885,6 +2886,7 @@ static long live_fish_id_database[] = {0x191, 0x246, 0x249, 0x24b, 0x24d, 0x24e,
                                        0x220, /* BlueField4 */
                                        0x250, /* Spectrum3 */
                                        0x254, /* Spectrum4 */
+                                       0x270, /* Spectrum5 */
                                        0x257, /* Quantum2 */
                                        0x25b, /* Quantum3 */
                                        -1};

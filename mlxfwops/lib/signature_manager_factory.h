@@ -167,7 +167,7 @@ public:
         {
             return new RavenSwitchSignatureManager();
         }
-        else if (chip == CT_QUANTUM2 || chip == CT_QUANTUM3 || chip == CT_SPECTRUM4)
+        else if (chip == CT_QUANTUM2 || chip == CT_QUANTUM3 || chip == CT_SPECTRUM4 || chip == CT_SPECTRUM5)
         {
             return new SecuredSwitchSignatureManager();
         }

@@ -69,6 +69,7 @@
 #define QUANTUM3_HW_ID 603
 #define ARCUSE_HW_ID 45568
 #define SPECTRUM4_HW_ID 596
+#define SPECTRUM5_HW_ID 624
 #define GEARBOX_HW_ID 594
 #define GB_MANAGER_HW_ID 595
 #define ABIR_GB_HW_ID 598
@@ -359,6 +360,7 @@ typedef enum chip_type
     CT_QUANTUM2,
     CT_QUANTUM3,
     CT_SPECTRUM4,
+    CT_SPECTRUM5,
     CT_GEARBOX,
     CT_GEARBOX_MGR,
     CT_ABIR_GEARBOX,

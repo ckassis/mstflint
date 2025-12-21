@@ -480,7 +480,7 @@ static struct device_info g_devs_info[] = {
         53104,                                                /* sw_dev_id */
         "Spectrum3",                                          /* name */
         "Spectrum3",                                          /* external_name */
-        128,                                                  /* port_num NEED_CHECK */
+        128,                                                  /* port_num */
         DM_SWITCH                                             /* dev_type */
     },
     {
@@ -490,7 +490,17 @@ static struct device_info g_devs_info[] = {
         53120,                                                /* sw_dev_id */
         "Spectrum4",                                          /* name */
         "Spectrum4",                                          /* external_name */
-        128,                                                  /* port_num NEED_CHECK */
+        128,                                                  /* port_num */
+        DM_SWITCH                                             /* dev_type */
+    },
+    {
+        DeviceSpectrum5,                                      /* dm_id */
+        0x270,                                                /* hw_dev_id */
+        -1,                                                   /* hw_rev_id */
+        53122,                                                /* sw_dev_id */
+        "Spectrum5",                                          /* name */
+        "Spectrum5",                                          /* external_name */
+        514,                                                  /* port_num */
         DM_SWITCH                                             /* dev_type */
     },
     {
@@ -1049,7 +1059,7 @@ int dm_dev_is_raven_family_switch(dm_dev_id_t type)
     return (dm_dev_is_switch(type) &&
             (type == DeviceQuantum || type == DeviceQuantum2 || type == DeviceQuantum3 || type == DeviceGB100 ||
              type == DeviceGR100 ||
-             type == DeviceSpectrum2 || type == DeviceSpectrum3 || type == DeviceSpectrum4));
+             type == DeviceSpectrum2 || type == DeviceSpectrum3 || type == DeviceSpectrum4 || type == DeviceSpectrum5));
 }
 
 int dm_dev_is_ib_switch(dm_dev_id_t type)
@@ -1062,7 +1072,8 @@ int dm_dev_is_ib_switch(dm_dev_id_t type)
 int dm_dev_is_eth_switch(dm_dev_id_t type)
 {
     return (dm_dev_is_switch(type) &&
-            (type == DeviceSpectrum || type == DeviceSpectrum2 || type == DeviceSpectrum3 || type == DeviceSpectrum4));
+            (type == DeviceSpectrum || type == DeviceSpectrum2 || type == DeviceSpectrum3 || type == DeviceSpectrum4
+            || type == DeviceSpectrum5));
 }
 
 int dm_dev_is_fs3(dm_dev_id_t type)
@@ -1083,7 +1094,8 @@ int dm_dev_is_fs4(dm_dev_id_t type)
 int dm_dev_is_fs5(dm_dev_id_t type)
 {
     return type == DeviceConnectX8 || type == DeviceConnectX8_Pure_PCIe_Switch || type == DeviceQuantum3 ||
-           type == DeviceBlueField4 || type == DeviceConnectX9 || type == DeviceConnectX9_Pure_PCIe_Switch;
+           type == DeviceBlueField4 || type == DeviceConnectX9 || type == DeviceConnectX9_Pure_PCIe_Switch ||
+           type == DeviceSpectrum5;
 }
 
 int dm_is_ib_access(mfile* mf)
