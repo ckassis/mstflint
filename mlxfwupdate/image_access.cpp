@@ -53,7 +53,7 @@
 #else
 #include <tools_layouts/connectx4_layouts.h>
 #endif
-#include "pldmlib/pldm_utils.h"
+#include "pldm_utils/pldm_utils.h"
 #include <mlxarchive/mlxarchive_mfa2.h>
 
 #define ITOC_ASCII 0x49544f43
@@ -1232,7 +1232,7 @@ int ImageAccess::getPldmContent(vector<PsidQueryItem>& riv, ComponentIdentifier 
                 ComponentIdentifier identifier = static_cast<ComponentIdentifier>(getComponentImage->getComponentIdentifier());
 
                 PsidQueryItem item;
-                ComponentIdentifierToStringValue(identifier, COMPONENT_NAME, item.name);
+                ComponentIdentifierToStringValue(identifier, ComponentField::Name, item.name);
                 item.type = getComponentImage->getcomponentVersionString();
                 item.psid = rec->GetVendorDefinedValue(PldmRecordDescriptor::VendorDefinedType::PSID);
                 item.isNicComp = false;
